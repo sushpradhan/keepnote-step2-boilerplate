@@ -2,9 +2,15 @@ package com.stackroute.keepnote.dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.stackroute.keepnote.model.Note;
+
 
 /*
  * This class is implementing the NoteDAO interface. This class has to be annotated with @Repository
@@ -15,15 +21,19 @@ import com.stackroute.keepnote.model.Note;
  * 					transaction. The database transaction happens inside the scope of a persistence 
  * 					context.  
  * */
-
+@Repository
+@Transactional
 public class NoteDAOImpl implements NoteDAO {
 
 	/*
 	 * Autowiring should be implemented for the SessionFactory.
 	 */
-
+	
+     @Autowired
+     private SessionFactory sessionFactory;
+     
 	public NoteDAOImpl(SessionFactory sessionFactory) {
-
+          this.sessionFactory=sessionFactory;
 	}
 
 	/*
@@ -31,8 +41,9 @@ public class NoteDAOImpl implements NoteDAO {
 	 */
 
 	public boolean saveNote(Note note) {
-		return false;
-
+	
+		sessionFactory.getCurrentSession().save(note);
+		return true;
 	}
 
 	/*
@@ -40,7 +51,9 @@ public class NoteDAOImpl implements NoteDAO {
 	 */
 
 	public boolean deleteNote(int noteId) {
-		return false;
+		     Session session=sessionFactory.getCurrentSession();
+		      session.delete(getNoteById(noteId));  
+		      return true;
 
 	}
 
@@ -49,23 +62,31 @@ public class NoteDAOImpl implements NoteDAO {
 	 * order(showing latest note first)
 	 */
 	public List<Note> getAllNotes() {
-		return null;
-
+		return sessionFactory.getCurrentSession().createQuery("from Note order by note_creation_date desc").list();
+          
 	}
 
 	/*
 	 * retrieve specific note from the database(note) table
 	 */
 	public Note getNoteById(int noteId) {
-		return null;
+		return sessionFactory.getCurrentSession().get(Note.class,noteId);
+		    
 
 	}
 
 	/* Update existing note */
 
 	public boolean UpdateNote(Note note) {
-		return false;
-
+		Note note1=getNoteById(note.getNoteId());
+		if(note1!=null)
+		{
+			note1.setNoteTitle(note.getNoteTitle());
+			note1.setNoteContent(note.getNoteContent());
+			note1.setNoteStatus(note.getNoteStatus());
+			return true;
+		}
+        return false;
 	}
 
 }
