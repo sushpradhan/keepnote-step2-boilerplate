@@ -1,19 +1,20 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-	<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html lang="en">
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<title>Keep-Board</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>KeepNote</title>
 </head>
-
-
-	<!-- Create a form which will have text boxes for Note title, content and status along with a Add 
-		 button. Handle errors like empty fields -->
-
-	<!-- display all existing notes in a tabular structure with Title,Content,Status, Created Date and Action -->
 <body>
+	<!-- Create a form which will have text boxes for Note ID, title, content and status along with a Send 
+		 button. Handle errors like empty fields -->
+		 
+		 
 	<h2>Note Information</h2>
 	
 	<form action="/add" method="POST">
@@ -50,7 +51,7 @@
 		<td>Delete Row</td>
 		<td>Update Row</td>
 	</tr>
-	<c:forEach items="${notelist}" var="note">
+	<c:forEach items="${notelist}" var="Note">
 		
 		<tr>
 		<td>${note.noteTitle}</td>
@@ -77,8 +78,6 @@
 		</tr>
 		</c:forEach>	
 	</table>
-	
-</body>
 </body>
 
 </html>
